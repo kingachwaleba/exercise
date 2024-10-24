@@ -6,9 +6,11 @@ PREFIX = "y-wing/"
 
 s3_client = boto3.client("s3")
 
-response = s3_client.list_objects_v2(
-    Bucket=BUCKET_NAME,
-    Prefix=PREFIX
-)
-for file in response.get("Contents"):
-    print(file["Key"])
+def list_files():
+    response = s3_client.list_objects_v2(
+        Bucket=BUCKET_NAME,
+        Prefix=PREFIX
+    )
+    for file in response.get("Contents"):
+        print(file["Key"])
+
