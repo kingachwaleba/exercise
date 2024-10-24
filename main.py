@@ -1,12 +1,14 @@
 import boto3
-
+from boto3 import client
 
 BUCKET_NAME = "developer-task"
 PREFIX = "y-wing/"
 
-session = boto3.Session(profile_name="default")
-s3 = session.resource("s3")
+s3_client = boto3.client("s3")
 
-bucket = s3.Bucket(BUCKET_NAME)
-for file in bucket.objects.filter(Prefix=PREFIX):
-    print(file.key)
+response = s3_client.list_objects_v2(
+    Bucket=BUCKET_NAME,
+    Prefix=PREFIX
+)
+for file in response.get("Contents"):
+    print(file["Key"])
