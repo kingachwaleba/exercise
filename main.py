@@ -1,4 +1,6 @@
 import os
+from urllib.request import build_opener
+
 import click
 import boto3
 from botocore.exceptions import ClientError
@@ -43,6 +45,14 @@ def upload_file_final(file_name, bucket, object_name):
             bucket,
             object_name
         )
+
+@cli.command()
+@click.argument('pattern')
+def filter_files(pattern):
+    s3 = boto3.resource("s3")
+    bucket = s3.Bucket(BUCKET_NAME)
+    for file in bucket.objects.filter(Prefix=pattern):
+        print(file.key)
 
 if __name__ == "__main__":
     cli()
