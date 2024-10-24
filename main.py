@@ -27,5 +27,10 @@ def upload_file(file_name, bucket, object_name=None):
         return False
     return True
 
-with open("FILE_NAME", "rb") as f:
-    s3_client.upload_fileobj(f, "amzn-s3-demo-bucket", "OBJECT_NAME")
+def upload_file_final(file_name, bucket, object_name):
+    with open(file_name, "rb") as file:
+        s3_client.upload_fileobj(
+            file,
+            bucket,
+            object_name
+        )
