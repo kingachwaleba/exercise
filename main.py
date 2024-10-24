@@ -1,5 +1,5 @@
 import os
-
+import click
 import boto3
 from botocore.exceptions import ClientError
 
@@ -8,6 +8,11 @@ PREFIX = "y-wing/"
 
 s3_client = boto3.client("s3")
 
+@click.group()
+def cli():
+    pass
+
+@cli.command()
 def list_files():
     response = s3_client.list_objects_v2(
         Bucket=BUCKET_NAME,
@@ -27,6 +32,10 @@ def upload_file(file_name, bucket, object_name=None):
         return False
     return True
 
+@cli.command()
+@click.argument('file_name')
+@click.argument('bucket')
+@click.argument('object_name')
 def upload_file_final(file_name, bucket, object_name):
     with open(file_name, "rb") as file:
         s3_client.upload_fileobj(
@@ -34,3 +43,6 @@ def upload_file_final(file_name, bucket, object_name):
             bucket,
             object_name
         )
+
+if __name__ == "__main__":
+    cli()
