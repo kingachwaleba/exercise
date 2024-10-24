@@ -54,5 +54,17 @@ def filter_files(pattern):
     for file in bucket.objects.filter(Prefix=pattern):
         print(file.key)
 
+@cli.command()
+@click.argument('pattern')
+def delete_files(pattern):
+    response = s3_client.list_objects_v2(
+        Bucket=BUCKET_NAME,
+        Prefix=PREFIX
+    )
+    for file in response.get("Contents"):
+        if pattern in file.get("Key"):
+            s3_client.delete_object(Bucket=BUCKET_NAME, Key=file)
+            print(f"{file.get("Key")} has been deleted")
+
 if __name__ == "__main__":
     cli()
