@@ -1,16 +1,12 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import boto3
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+BUCKET_NAME = "developer-task"
+PREFIX = "y-wing/"
 
+session = boto3.Session(profile_name="default")
+s3 = session.resource("s3")
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+bucket = s3.Bucket(BUCKET_NAME)
+for file in bucket.objects.filter(Prefix=PREFIX):
+    print(file.key)
