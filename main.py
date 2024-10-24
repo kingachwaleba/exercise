@@ -68,8 +68,9 @@ def delete_files(pattern):
     )
     for file in response.get("Contents"):
         if regex.search(file.get("Key")):
+            file_name = file.get("Key")
             s3_client.delete_object(Bucket=BUCKET_NAME, Key=file)
-            print(f"{file.get("Key")} has been deleted")
+            print(f"{file_name} has been deleted")
 
 if __name__ == "__main__":
     cli()
